@@ -2,11 +2,22 @@
 
 A pi based program for monitoring contact inputs from a wired alarm system
 
-## Overview
+## Features
 
+* Watches for contact closure on a configured gpio pin
+* Register a callback type on open/close
+* Web ui to see status
+
+![Image of Home](broadlink_home.png?raw=true)
 
 
 ## Configuration
+
+See config example.  
+
+## Install
+
+Copy binary to a suitable location, service file included for linux/raspi
 
  
 ### Pin Entries
