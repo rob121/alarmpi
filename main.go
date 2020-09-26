@@ -278,7 +278,7 @@ func eventWatcher(){
             }
             
             //pinchan <- pins
-            
+            //refresh the webui
              <-emt.Emit("change", 1)
             
             switch obj.ActionType { 

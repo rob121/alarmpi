@@ -1,6 +1,6 @@
 # Alarm Pi
 
-A pi based program for monitoring contact inputs from a wired alarm system
+A pi based program for monitoring contact inputs from a wired alarm system and sending those events to a home automation platform
 
 ## Features
 
@@ -13,7 +13,17 @@ A pi based program for monitoring contact inputs from a wired alarm system
 
 ## Configuration
 
-See config example.  
+See config example.   The config.json may be placed in /etc/alarmpi, .alarmpi in your $HOME directory, or in the current working directory
+
+### Extra settings
+
+In extreme cases you may need to set the following, the default values are below
+
+```
+   "AppName": "alarmpi",
+   "HttpActionTimeout": "15s",
+   "Chip": "gpiochip0"
+```
 
 ## Install
 
@@ -51,10 +61,15 @@ Http will execute the url provided in the "Open" and "Close fields"
 Exec will execute a script named in "Open" or Closed and pass in the following arguments
 
 
-* 1Name: gpio16
+* Name: gpio16
 * State: open|closed
 * Label: Front Door
 
+It will essentially execute as if you were running the following
+
+```
+./callback_script.sh gpio16 open "Front Door"
+```
 
 
 
