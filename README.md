@@ -18,8 +18,8 @@ The configuration has a top level "Pins" each top level contains a association t
 		"GPIO16":{
     		"Label": "Contact 1",
     		"Type": "http",
-			"Open": "http://192.168.20.10/apps/api/8/devices/3468/open?access_token=25f4a106-58f0-4dc9-b00a-cd4b5fc69a73",
-			"Closed": "http://192.168.20.10/apps/api/8/devices/3468/close?access_token=25f4a106-58f0-4dc9-b00a-cd4b5fc69a73"
+			"Open": "http://example.com/on",
+			"Closed": "example.com/off"
 		},
 ```
 
