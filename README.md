@@ -30,6 +30,17 @@ In extreme cases you may need to set the following, the default values are below
 
 Copy binary to a suitable location, service file included for linux/raspi
 
+
+### Attaching Sensors to you pi
+
+#### Contact sensors (Doors/Windows)
+
+Attach one leg of the sensor to 3.3v and the other to a GPIO PIN (Care should be taken here, if your pins are in some weird state and not reading input you can damage things)
+
+#### Motion sensors
+
+Coming soon
+
 ## Run
 
 To run execute on the command line, the default port is 8000, but can be changed in the configuration
