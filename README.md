@@ -7,6 +7,7 @@ A pi based program for monitoring contact inputs from a wired alarm system and s
 * Watches for contact closure on a configured gpio pin
 * Register a callback type on open/close
 * Web ui to see status
+* Web api request to see status (GET /status)
 
 ![Image of Home](alarmpi_home.png?raw=true)
 
@@ -29,6 +30,13 @@ In extreme cases you may need to set the following, the default values are below
 
 Copy binary to a suitable location, service file included for linux/raspi
 
+## Run
+
+To run execute on the command line, the default port is 8000, but can be changed in the configuration
+
+```
+./alarmpi
+```
  
 ### Pin Entries
 
