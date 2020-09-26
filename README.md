@@ -8,7 +8,7 @@ A pi based program for monitoring contact inputs from a wired alarm system
 * Register a callback type on open/close
 * Web ui to see status
 
-![Image of Home](broadlink_home.png?raw=true)
+![Image of Home](alarmpi_home.png?raw=true)
 
 
 ## Configuration
