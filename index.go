@@ -170,7 +170,7 @@ window.addEventListener("load", function(evt) {
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Github</a>
+            <a class="nav-link" href="https://github.com/rob121/alarmpi">Github</a>
           </li>
         </ul>
       </div>
