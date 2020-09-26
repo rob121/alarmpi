@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 	"log"
+	"fmt"
 	"strings"
 	"net/http"
     "github.com/spf13/viper"
@@ -28,10 +29,10 @@ type PinAssociation struct{
     Name string
     Pin int
     Label string
-    OnOpen string
-    OnClose string
+    OnOpen string `json:"-"`
+    OnClose string `json:"-"`
     ActionType string   
-    PinLine *gpiod.Line
+    PinLine *gpiod.Line `json:"-"`
     State string
 }
 
@@ -74,6 +75,8 @@ func startWebServer(){
     log.Println("Starting Webserver")
     
     r := mux.NewRouter()
+    r.HandleFunc("/ping", pingHandler)
+    r.HandleFunc("/status", sensorsHandler)
     r.HandleFunc("/ws", wsHandler)
     r.HandleFunc("/", indexHandler)
     http.Handle("/", r)
@@ -105,6 +108,23 @@ type PageData struct{
     Url string
     Pins map[int]*PinAssociation
     Ws string
+}
+
+func pingHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w,"pong")
+}
+
+func sensorsHandler(w http.ResponseWriter, r *http.Request) {
+    
+              
+          b, jerr := json.Marshal(pins)
+    	  if jerr != nil {
+    		log.Println("encoding error:", jerr)
+    		fmt.Fprintf(w,`{ "error": true }`)
+    		return
+    	  }
+    	  
+    	  fmt.Fprintf(w,string(b))
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
