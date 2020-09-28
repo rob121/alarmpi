@@ -1,13 +1,15 @@
 {
 	"Pins":{
 		"GPIO16":{
+    		"Device": "contact",
     		"Label": "Contact 1",
     		"Type": "http",
 			"Open": "http://example.com/on",
 			"Closed": "http://example.com/off"
 		},
 		"GPIO25":{
-    		"Label": "Contact 2",
+            "Device": "motion",
+    		"Label": "Dining Room Motion",
     		"Type": "exec",
 			"Open":"./callback.sh",
 			"Closed":"./callback.sh"

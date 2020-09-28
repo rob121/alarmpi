@@ -34,6 +34,7 @@ type PinAssociation struct{
     ActionType string   
     PinLine *gpiod.Line `json:"-"`
     State string
+    Device string
 }
 
 func main() {
@@ -54,13 +55,21 @@ func main() {
         panic(err)
         
     }
+
+    go eventWatcher()
+
+    setupPins()
+
+
+        
+  
    
     //handl the events here
     go startWebServer()
-    go eventWatcher()
+
     
     
-    setupPins()
+  
     
   
     
@@ -245,7 +254,7 @@ func setupPins(){
            
        }
    
-       pa := &PinAssociation{k,pin,data["label"].(string),data["open"].(string),data["closed"].(string),data["type"].(string),l,""}
+       pa := &PinAssociation{k,pin,data["label"].(string),data["open"].(string),data["closed"].(string),data["type"].(string),l,"",data["device"].(string)}
 
        var state gpiod.LineEventType
         
@@ -261,23 +270,35 @@ func setupPins(){
 	   
 	   pins[pin]=pa
 	   
-	   events <- evt
-   
-   
+	   //events <- evt
 	   
-          
+	   <-emt.Emit("gpioevent", evt)
+   
     }
     
     
 }
 
 func eventWatcher(){
+
     
     
-     for {
-        select {
-        case evt := <-events:
-           // log.Printf("New Event %#v\n",evt)
+    //the below code debounces events from gpi, change timeout to smooth things out
+   
+    
+    for evtraw := range emt.On("gpioevent"){
+        	// so the sending is done
+      
+        	 evt := evtraw.Args[0].(gpiod.LineEvent)
+             go parseEvent(evt)
+    }
+    
+     
+    
+}
+
+func parseEvent(evt gpiod.LineEvent){
+    
             
             var obj *PinAssociation
             var ok bool
@@ -285,21 +306,34 @@ func eventWatcher(){
             if obj, ok = pins[evt.Offset]; !ok {
                 
                    log.Printf("Pin Data not in configuration! %#v\n",evt)
-                   break
+                   return
         
             }
             
-            pins[evt.Offset].State = "open"
+            var states []string
+            
+            switch (pins[evt.Offset].Device) {
+                case "motion":
+                states=[]string{"inactive","active"}
+                break
+                case "contact":
+                states=[]string{"open","closed"}
+                break
+                default:
+                states=[]string{"open","closed"}   
+            } 
+            
+            pins[evt.Offset].State = states[0]
             
             if int(evt.Type) == 1 {
                 
-                pins[evt.Offset].State  = "closed"
+                pins[evt.Offset].State  = states[1]
                 
             }
             
             //pinchan <- pins
             //refresh the webui
-             <-emt.Emit("change", 1)
+            <-emt.Emit("change", 1)
             
             switch obj.ActionType { 
                 case "http":
@@ -312,18 +346,10 @@ func eventWatcher(){
                  log.Println("Action Not Implemented!")
                 break
             }
-            
-       
-        case do := <-done:
-            log.Println("Received done:", do)
-        }
-      
-       }
-
-    
     
     
 }
+
 
 func actionHttp(obj *PinAssociation,state int){
     
@@ -411,7 +437,7 @@ func actionExec(obj *PinAssociation,state int){
         out, err := cmd.CombinedOutput()
         
         if err != nil {
-                log.Fatalf("cmd.Run() failed with %s\n", err)
+                log.Println("cmd.Run() failed with %s\n", err)
         }
         
         log.Printf("combined out:\n%s\n", string(out))
@@ -424,7 +450,10 @@ func actionExec(obj *PinAssociation,state int){
 func handler(evt gpiod.LineEvent) {
 	// handle change in line state
 	//New Event gpiod.LineEvent{Offset:16, Timestamp:1601067131395882654, Type:2}
-	events <- evt
+	//events <- evt
+	
+	
+     <-emt.Emit("gpioevent", evt)
 }
 
 func setupConfig(){

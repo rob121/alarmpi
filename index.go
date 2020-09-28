@@ -93,6 +93,7 @@ var Index =`
 
                 tr = "<tr>";
                 tr += "<td>"+val.Label+"</td>";
+                tr += "<td>"+val.Device+"</td>";
                 tr += "<td>"+val.Name+"</td>";
                 tr += "<td>"+val.ActionType+"</td>";
                 tr += "<td><div class='label'>"+val.State+"</div><div class='indicator "+val.State+"' >&nbsp;</div></td>";
@@ -146,13 +147,13 @@ window.addEventListener("load", function(evt) {
      
  }
 
- .open { 
+ .open,.inactive { 
      
      border:5px solid #006699;
      background-color: #FFFFFF;
      
  }
- .closed { 
+ .closed,.active { 
      border:5px solid #006699;
      background-color: #006699;
  }
@@ -186,18 +187,11 @@ window.addEventListener("load", function(evt) {
                 <table class="table table-striped">
                  <thead class="thead-dark">
                  <tr>
-                 <th scope="col" >
-                  Label
-                  </th>
-                  <th>
-                  Pin
-                  </th>
-                  <th>
-                  Type
-                  </th>
-                  <th>
-                  Status
-                  </th>
+                  <th scope="col" >Label</th>
+                  <th>Device</th>
+                  <th>Pin</th>
+                  <th>Type</th>
+                  <th>Status</th>
                  </tr>
                  </thead> 
                  <tbody id="state">
@@ -207,7 +201,9 @@ window.addEventListener("load", function(evt) {
                     <td>
                      {{ .Label }}
                     </td>
-                    
+                    <td>
+                     {{ .Device }}
+                    </td>
                     <td>
                      {{ .Name }}
                     </td>
