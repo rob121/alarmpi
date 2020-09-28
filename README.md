@@ -39,7 +39,13 @@ Attach one leg of the sensor to 3.3v and the other to a GPIO PIN (Care should be
 
 #### Motion sensors
 
-Coming soon
+Using pir motion sensors that have 3 leges, connect in the following manner:
+
+* leg 1 v+ to 5v on the pi
+* leg 2 high/low to GPIO pin of choice
+* leg 3 gnd to gnd on pi
+
+[This is an example of a product that works](https://www.amazon.com/HiLetgo-Pyroelectric-Sensor-Infrared-Detector/dp/B07RT7MK7C/ref=sr_1_1?dchild=1&keywords=pir+motion+hiletgo&qid=1601258474&sr=8-1)
 
 ## Run
 
@@ -56,6 +62,7 @@ The configuration has a top level "Pins" each top level contains a association t
 ```
 	"Pins":{
 		"GPIO16":{
+    		"Device": "contact|motion",
     		"Label": "Contact 1",
     		"Type": "http",
 			"Open": "http://example.com/on",

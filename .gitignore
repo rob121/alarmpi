@@ -1,2 +1,4 @@
 config.json
 bin
+deploy.sh
+.DS_Store
