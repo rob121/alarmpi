@@ -26,6 +26,18 @@ In extreme cases you may need to set the following, the default values are below
    "Chip": "gpiochip0"
 ```
 
+## Other Integration
+
+### Hubitat
+Expects a config entry like below, with the maker api pasted in and %s replacing the device id and the command
+
+```
+  "integrations": {
+      "hubitat": "http://192.168.1.5/apps/api/8/devices/%s/%s?access_token=25345qwe469a73"
+   }
+}
+```
+
 ## Install
 
 Copy binary to a suitable location, service file included for linux/raspi
@@ -70,6 +82,10 @@ The type of event to trigger on, options are "http" for making a HTTP GET reques
 #### Http 
 
 Http will execute the url provided in the "Open" and "Close fields"
+
+#### Hubitat
+
+Will execute a appropriate command on the maker api for the provided id in "Open" and "Closed" fields
 
 #### Exec
 
