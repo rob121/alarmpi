@@ -1,19 +1,8 @@
 {
-	"Pins":{
-		"GPIO16":{
-    		"Device": "contact",
-    		"Label": "Contact 1",
-    		"Type": "http",
-			"Open": "http://example.com/on",
-			"Closed": "http://example.com/off"
-		},
-		"GPIO25":{
-            "Device": "motion",
-    		"Label": "Dining Room Motion",
-    		"Type": "exec",
-			"Open":"./callback.sh",
-			"Closed":"./callback.sh"
-		}
-	},
-	"Port":"8000"
+  "appname": "alarmpi",
+  "chip": "gpiochip0",
+  "debug": false,
+  "gpiopinct": 40,
+  "httpactiontimeout": "15s",
+  "port": "8000"
 }

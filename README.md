@@ -57,18 +57,7 @@ To run execute on the command line, the default port is 8000, but can be changed
  
 ### Pin Entries
 
-The configuration has a top level "Pins" each top level contains a association to a GPIO pin and within each block  you have the following labels
-
-```
-	"Pins":{
-		"GPIO16":{
-    		"Device": "contact|motion",
-    		"Label": "Contact 1",
-    		"Type": "http",
-			"Open": "http://example.com/on",
-			"Closed": "example.com/off"
-		},
-```
+Fill out a entry for each pin in the interface
 
 #### Label
 
