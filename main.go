@@ -478,10 +478,10 @@ func parseEvent(evt gpiod.LineEvent){
 		states=[]string{"inactive","active"}
 		break
 	case "contact":
-		states=[]string{"open","close"}
+		states=[]string{"open","closed"}
 		break
 	default:
-		states=[]string{"open","close"}
+		states=[]string{"open","closed"}
 	}
 
 	pins[evt.Offset].State = states[0]
@@ -547,9 +547,15 @@ func actionHubitat(obj *PinAssociation,state int){
 
 		log.Printf("Received event on %s (%s): %s",obj.Label,obj.Name,"Closed")
 
+	   	st := obj.State
+//hack for fixing the naming convention on hubitat
+         if(obj.State=="closed"){
+
+         	st =  "close"
+		 }
 
 
-	     url = fmt.Sprintf(rawurl,obj.OnClose,obj.State)
+	     url = fmt.Sprintf(rawurl,obj.OnClose,st)
 
 
 	}else{
