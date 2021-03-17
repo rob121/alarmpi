@@ -478,10 +478,10 @@ func parseEvent(evt gpiod.LineEvent){
 		states=[]string{"inactive","active"}
 		break
 	case "contact":
-		states=[]string{"open","closed"}
+		states=[]string{"open","close"}
 		break
 	default:
-		states=[]string{"open","closed"}
+		states=[]string{"open","close"}
 	}
 
 	pins[evt.Offset].State = states[0]
@@ -492,6 +492,8 @@ func parseEvent(evt gpiod.LineEvent){
 
 	}
 
+	obj  = pins[evt.Offset]
+
 	//pinchan <- pins
 	//refresh the webui
 	<-emt.Emit("change", 1)
@@ -500,6 +502,9 @@ func parseEvent(evt gpiod.LineEvent){
 	case "http":
 		actionHttp(obj,int(evt.Type))
 		break
+	case "hubitat":
+		actionHubitat(obj,int(evt.Type))
+		break
 	case "exec":
 		actionExec(obj,int(evt.Type))
 		break
@@ -507,6 +512,72 @@ func parseEvent(evt gpiod.LineEvent){
 		log.Println("Action Type Not Implemented!")
 		break
 	}
+
+
+}
+
+func actionHubitat(obj *PinAssociation,state int){
+
+
+	//log.Println("Received hubitat action")
+
+
+	var url string
+
+	dur,perr := time.ParseDuration(viper.GetString("HttpActionTimeout"))
+
+	if(perr!=nil){
+
+		log.Println("Invalid Duration")
+		dur = 15 * time.Second
+
+	}
+
+	rawurl := viper.GetString("Integrations.Hubitat")
+
+	c := &http.Client{
+
+		Timeout: dur,
+
+	}
+
+
+
+	if(state==1){
+
+		log.Printf("Received event on %s (%s): %s",obj.Label,obj.Name,"Closed")
+
+
+
+	     url = fmt.Sprintf(rawurl,obj.OnClose,obj.State)
+
+
+	}else{
+
+		log.Printf("Received event on %s (%s): %s",obj.Label,obj.Name,"Open")
+
+		url = fmt.Sprintf(rawurl,obj.OnOpen,obj.State)
+
+
+	}
+
+	if (len(url)<10){
+
+		log.Println("Invalid Url")
+		return
+	}
+
+
+	_, err := c.Get(url)
+
+	// check for response error
+	if err != nil {
+		log.Println( err )
+		return
+	}
+
+	log.Printf("Action Success on %s\n",url)
+
 
 
 }

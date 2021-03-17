@@ -24,7 +24,7 @@ func loadAttributes() Attributes {
         
     }
     
-    return Attributes{Devices: []string{"contact","motion"},Pins: defpins,Types: []string{"http","exec"}}
+    return Attributes{Devices: []string{"contact","motion"},Pins: defpins,Types: []string{"http","hubitat","exec"}}
     
     
 }
