@@ -210,11 +210,19 @@ func setupPins() {
 			l, rerr := chip.RequestLine(pin, gpiod.WithBothEdges, gpiod.WithEventHandler(handler))
 
 			if rerr != nil {
+				log.Println(rerr)
+				continue
 			}
 
 			var state gpiod.LineEventType
 
-			r, _ := l.Value() // Read state from line (active/inactive)
+			r, err := l.Value() // Read state from line (active/inactive)
+
+			if(err!=nil){
+
+				log.Println(err)
+
+			}
 
 			state = gpiod.LineEventType(r)
 
@@ -411,16 +419,55 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 func eventWatcher() {
 
 	//the below code debounces events from gpi, change timeout to smooth things out
+	eventChan := make(chan gpiod.LineEvent)
+
+	go debounceEvent(1500*time.Millisecond, eventChan, func(evt gpiod.LineEvent) {
+
+		log.Println("Got Debounce Event")
+
+		go parseEvent(evt)
+
+	})
+
+
 
 	for evtraw := range emt.On("gpioevent") {
 		// so the sending is done
 
 		evt := evtraw.Args[0].(gpiod.LineEvent)
 
-		//log.Println(evtraw.Args[0])
-		go parseEvent(evt)
+
+		eventChan <- evt
 	}
 
+}
+
+
+func debounceEvent(interval time.Duration, input chan gpiod.LineEvent, cb func(arg gpiod.LineEvent)) {
+
+	var itemhold gpiod.LineEvent
+	var lister = make(map[int]gpiod.LineEvent)
+	timer := time.NewTimer(interval)
+
+	for {
+
+
+		select {
+		case itemhold = <-input:
+
+			lister[itemhold.Offset]=itemhold
+
+		case <-timer.C:
+
+			for key,item := range lister{
+
+				cb(item)
+
+				delete(lister,key)
+			}
+			timer.Reset(interval)
+		}
+	}
 }
 
 func parseEvent(evt gpiod.LineEvent) {
