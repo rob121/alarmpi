@@ -421,7 +421,7 @@ func eventWatcher() {
 	//the below code debounces events from gpi, change timeout to smooth things out
 	eventChan := make(chan gpiod.LineEvent)
 
-	go debounceEvent(1500*time.Millisecond, eventChan, func(evt gpiod.LineEvent) {
+	go debounceEvent(50*time.Millisecond, eventChan, func(evt gpiod.LineEvent) {
 
 		log.Println("Got Debounce Event")
 
