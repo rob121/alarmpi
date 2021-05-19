@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/asdine/storm/v3"
+        "github.com/lithammer/shortuuid/v3"
 	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
@@ -261,6 +262,10 @@ func removeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pa.Active = false
+
+        uui := shortuuid.New()
+
+        pa.Name = uui //allow us to overwrite whatever is here
 
 	err = db.Save(&pa)
 
