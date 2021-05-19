@@ -45,6 +45,16 @@ Copy binary to a suitable location, service file included for linux/raspi
 
 ### Attaching Sensors to you pi
 
+### GPIO Confiugration
+
+It's a good idea to add to your /boot/config.txt the following
+
+```
+gpio=0-53=ip,pd
+```
+
+This instructs the pi to set pins 0-53 as inputs and pull down.  Alter as necessary for your install
+
 #### Contact sensors (Doors/Windows)
 
 Attach one leg of the sensor to 3.3v and the other to a GPIO PIN (Care should be taken here, if your pins are in some weird state and not reading input you can damage things)
