@@ -426,7 +426,7 @@ func eventWatcher() {
 	//the below code debounces events from gpi, change timeout to smooth things out
 	eventChan := make(chan gpiod.LineEvent)
 
-	deb := time.ParseDuration(viper.GetString("Debounce"))
+	deb,_ := time.ParseDuration(viper.GetString("Debounce"))
 
 	go debounceEvent(deb, eventChan, func(evt gpiod.LineEvent) {
 
