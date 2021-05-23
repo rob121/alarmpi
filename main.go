@@ -426,7 +426,9 @@ func eventWatcher() {
 	//the below code debounces events from gpi, change timeout to smooth things out
 	eventChan := make(chan gpiod.LineEvent)
 
-	go debounceEvent(50*time.Millisecond, eventChan, func(evt gpiod.LineEvent) {
+	deb := time.ParseDuration(viper.GetString("Debounce"))
+
+	go debounceEvent(deb, eventChan, func(evt gpiod.LineEvent) {
 
 		log.Println("Got Debounce Event")
 
@@ -707,6 +709,7 @@ func setupConfig() {
 	viper.SetDefault("Chip", "gpiochip0")
 	viper.SetDefault("Debug", false)
 	viper.SetDefault("Port", "8000")
+	viper.SetDefault("Debounce", "50ms")
 	viper.SetConfigType("json")
 	viper.SetConfigName("config")         // name of config file (without extension)
 	viper.AddConfigPath("/etc/alarmpi/")  // path to look for the config file in

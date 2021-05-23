@@ -4,6 +4,7 @@
   "debug": false,
   "gpiopinct": 40,
   "httpactiontimeout": "15s",
+  "debounce": "100ms",
   "port": "8000",
   "integrations": {
       "hubitat": "http://192.168.1.5/apps/api/8/devices/%s/%s?access_token=25f4a1a46345qwe469a73"
